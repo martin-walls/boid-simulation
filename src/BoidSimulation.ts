@@ -34,10 +34,15 @@ export interface BoidSimulationParams {
     acceleration: number;
     worldName: string;
     worldDimens: Bounds3D;
-    photorealisticRendering: boolean;
+    rendering: RenderingModes;
     randomnessPerTimestep: number;
     randomnessLimit: number;
     changeOfLeaderBoidOptions: ChangeOfLeaderBoidOptions;
+}
+
+export enum RenderingModes {
+    Simple = "Simple",
+    Photorealistic = "Photorealistic"
 }
 
 export class BoidSimulation extends Simulation {
@@ -50,6 +55,7 @@ export class BoidSimulation extends Simulation {
     worldNames: string[] = WorldTools.getNames(this.worlds);
 
     currentWorldName: string = defaultWorld.name;
+    currentRendering: string = RenderingModes.Simple;
 
     boids: Boid[] = [];
     private nextBoidId: BoidId = 0;
@@ -61,11 +67,8 @@ export class BoidSimulation extends Simulation {
         maxSpeed: 0.5,
         acceleration: 0.01,
         worldName: defaultWorld.name,
-        worldDimens: WorldTools.getWorldByName(
-            this.worlds,
-            this.currentWorldName,
-        ).get3DBoundaries(),
-        photorealisticRendering: false,
+        worldDimens: WorldTools.getWorldByName(this.worlds, this.currentWorldName).get3DBoundaries(),
+        rendering: RenderingModes.Simple,
         randomnessPerTimestep: 0.01,
         randomnessLimit: 0.1,
         changeOfLeaderBoidOptions: {
@@ -113,6 +116,7 @@ export class BoidSimulation extends Simulation {
         });
 
         this.controlsGui.add(this.simParams, "worldName", this.worldNames).name("World");
+        this.controlsGui.add(this.simParams, "rendering", this.getRenderingModeNames()).name("Rendering");
         this.controlsGui.add(this.simParams, "boidCount", 10, 200).name("Boid count");
         this.controlsGui.add(this.simParams, "maxSpeed", 0.1, 2, 0.01).name("Max speed");
         this.controlsGui
@@ -165,6 +169,10 @@ export class BoidSimulation extends Simulation {
         this.reloadWorld();
     }
 
+    getRenderingModeNames(): string[] {
+        return Object.values(RenderingModes);
+    }
+
     initializePhotorealisticRendering() {
         // Sun
         this.sun = new THREE.Vector3();
@@ -209,7 +217,7 @@ export class BoidSimulation extends Simulation {
     }
 
     updateSun() {
-        if (!this.simParams.photorealisticRendering)
+        if (this.simParams.rendering !== RenderingModes.Photorealistic)
             throw new Error("Photorealistic rendering is disabled.");
         if (
             this.sun === undefined ||
@@ -243,7 +251,8 @@ export class BoidSimulation extends Simulation {
 
     update() {
         // Reload the world if needed
-        if (this.currentWorldName !== this.simParams.worldName) {
+        if (this.currentWorldName !== this.simParams.worldName ||
+            this.currentRendering !== this.simParams.rendering) {
             this.reloadWorld();
         }
 
@@ -258,7 +267,7 @@ export class BoidSimulation extends Simulation {
         );
 
         if (
-            this.simParams.photorealisticRendering &&
+            this.simParams.rendering === RenderingModes.Photorealistic &&
             this.water !== undefined &&
             this.water.material instanceof ShaderMaterial
         ) {
@@ -283,7 +292,7 @@ export class BoidSimulation extends Simulation {
         this.arena = new Arena(this.simParams);
         this.addToScene(this.arena.mesh);
 
-        if (this.simParams.photorealisticRendering) {
+        if (this.simParams.rendering === RenderingModes.Photorealistic) {
             this.initializePhotorealisticRendering();
         } else {
             // Floor
@@ -294,13 +303,14 @@ export class BoidSimulation extends Simulation {
         // Obstacles
         for (const description of world.obstacles.cylinders) {
             const cylinder = new Cylinder({
-                description: description,
-                photorealisticRendering: this.simParams.photorealisticRendering
+                description: description, 
+                rendering: RenderingModes.Photorealistic
             });
             this.addToScene(cylinder.mesh);
         }
 
         this.currentWorldName = this.simParams.worldName;
+        this.currentRendering = this.simParams.rendering;
     }
 
     updateBoidCount() {
@@ -316,7 +326,7 @@ export class BoidSimulation extends Simulation {
                 boidType: this.simParams.boidType,
                 positionBounds: this.simParams.worldDimens,
                 acceleration: this.simParams.acceleration,
-                photorealisticRendering: this.simParams.photorealisticRendering,
+                rendering: this.simParams.rendering
             });
             this.addToScene(boid.mesh);
             this.boids.push(boid);

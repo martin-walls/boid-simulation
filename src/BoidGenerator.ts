@@ -1,6 +1,7 @@
 import { Bounds3D } from "./Bounds3D";
 import { Boid, BoidId } from "./objects/Boid";
 import * as THREE from "three";
+import { RenderingModes } from "./BoidSimulation";
 import {ChangeOfLeaderBoid} from "./objects/ChangeOfLeaderBoid";
 
 /*
@@ -25,7 +26,7 @@ export class BoidGenerator {
             positionBounds?: Bounds3D;
             velocityBounds?: Bounds3D;
             acceleration?: number;
-            photorealisticRendering: boolean;
+            rendering: RenderingModes;
         },
     ): Boid {
         const type = options?.boidType ?? BoidType.Normal;
@@ -47,7 +48,7 @@ export class BoidGenerator {
 
         const acceleration = options?.acceleration ?? 0.01;
 
-        const photorealisticRendering = options?.photorealisticRendering ?? false;
+        const rendering = options?.rendering ?? RenderingModes.Simple;
 
         const randomPosition = new THREE.Vector3(
             Math.random() * (maxXPos - minXPos) + minXPos,
@@ -68,14 +69,14 @@ export class BoidGenerator {
                     position: randomPosition,
                     velocity: randomVelocity,
                     acceleration,
-                    photorealisticRendering,
+                    rendering,
                 });
             case BoidType.ChangeOfLeader:
                 return new ChangeOfLeaderBoid(id, {
                     position: randomPosition,
                     velocity: randomVelocity,
                     acceleration,
-                    photorealisticRendering,
+                    rendering,
                 });
         }
     }

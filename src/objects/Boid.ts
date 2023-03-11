@@ -1,6 +1,7 @@
 import * as THREE from "three";
-import { Rule, RuleArguments } from "../rules/Rule";
-import { Material } from "three";
+import {Material} from "three";
+import {Rule, RuleArguments} from "../rules/Rule";
+import {RenderingModes} from "../BoidSimulation";
 
 export interface BoidOptions {
     // Initial boid position
@@ -9,7 +10,7 @@ export interface BoidOptions {
     velocity: THREE.Vector3;
     // Boid acceleration (change in velocity per timestep)
     acceleration: number;
-    photorealisticRendering?: boolean;
+    rendering: RenderingModes;
 }
 
 export type BoidId = number;
@@ -17,7 +18,7 @@ export type BoidId = number;
 export class Boid {
     readonly id: BoidId;
 
-    private readonly isPhotorealisticRendering: boolean;
+    private readonly renderingMode: RenderingModes;
 
     mesh: THREE.Mesh;
 
@@ -48,12 +49,12 @@ export class Boid {
 
     constructor(id: BoidId, options: BoidOptions) {
         this.id = id;
-        this.isPhotorealisticRendering = options.photorealisticRendering ?? false;
+        this.renderingMode = options.rendering;
         // model boids as a cone so we can see their direction
         const geometry = new THREE.ConeGeometry(1, 4);
 
         let material: Material;
-        if (this.isPhotorealisticRendering) {
+        if (this.renderingMode === RenderingModes.Photorealistic) {
             material = new THREE.MeshStandardMaterial({
                 color: this.generateIndividualColour(),
                 metalness: 1,
@@ -78,7 +79,7 @@ export class Boid {
      */
     private generateIndividualColour() {
         let lightnessAdjust: number;
-        if (this.isPhotorealisticRendering) {
+        if (this.renderingMode === RenderingModes.Photorealistic) {
             lightnessAdjust = Math.random() * 0.8;
         } else {
             lightnessAdjust = Math.random() * 0.4 - 0.2;
@@ -97,7 +98,7 @@ export class Boid {
      * state of different boids.
      */
     setColour(colour: THREE.Color) {
-        if (this.isPhotorealisticRendering) {
+        if (this.renderingMode === RenderingModes.Photorealistic) {
             (this.mesh.material as THREE.MeshStandardMaterial).color = colour;
         } else {
             (this.mesh.material as THREE.MeshBasicMaterial).color = colour;
