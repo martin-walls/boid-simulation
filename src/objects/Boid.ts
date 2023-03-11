@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { Material } from "three";
 import { Rule, RuleArguments } from "../rules/Rule";
-import { RenderingModes } from "../BoidSimulation";
+import { RenderingMode } from "../BoidSimulation";
 
 export interface BoidOptions {
     // Initial boid position
@@ -10,7 +10,7 @@ export interface BoidOptions {
     velocity: THREE.Vector3;
     // Boid acceleration (change in velocity per timestep)
     acceleration: number;
-    rendering: RenderingModes;
+    rendering: RenderingMode;
 }
 
 export type BoidId = number;
@@ -18,7 +18,7 @@ export type BoidId = number;
 export class Boid {
     readonly id: BoidId;
 
-    private readonly renderingMode: RenderingModes;
+    private readonly renderingMode: RenderingMode;
 
     mesh: THREE.Mesh;
 
@@ -54,7 +54,7 @@ export class Boid {
         const geometry = new THREE.ConeGeometry(1, 4);
 
         let material: Material;
-        if (this.renderingMode === RenderingModes.Photorealistic) {
+        if (this.renderingMode === RenderingMode.Photorealistic) {
             material = new THREE.MeshStandardMaterial({
                 color: this.generateIndividualColour(),
                 metalness: 1,
@@ -79,7 +79,7 @@ export class Boid {
      */
     private generateIndividualColour() {
         let lightnessAdjust: number;
-        if (this.renderingMode === RenderingModes.Photorealistic) {
+        if (this.renderingMode === RenderingMode.Photorealistic) {
             lightnessAdjust = Math.random() * 0.8;
         } else {
             lightnessAdjust = Math.random() * 0.4 - 0.2;
@@ -98,7 +98,7 @@ export class Boid {
      * state of different boids.
      */
     setColour(colour: THREE.Color) {
-        if (this.renderingMode === RenderingModes.Photorealistic) {
+        if (this.renderingMode === RenderingMode.Photorealistic) {
             (this.mesh.material as THREE.MeshStandardMaterial).color = colour;
         } else {
             (this.mesh.material as THREE.MeshBasicMaterial).color = colour;

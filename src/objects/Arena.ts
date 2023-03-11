@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { BoidSimulationParams, RenderingModes } from "../BoidSimulation";
+import { BoidSimulationParams, RenderingMode } from "../BoidSimulation";
 
 export class Arena {
     readonly mesh: Array<THREE.Object3D<THREE.Event>> = [];
@@ -9,7 +9,7 @@ export class Arena {
     constructor(params: BoidSimulationParams) {
         const dims = params.worldDimens;
 
-        if (params.rendering === RenderingModes.Photorealistic) {
+        if (params.rendering === RenderingMode.Photorealistic) {
             this.wallWidth = 5;
             this.floorGap = 10;
         }

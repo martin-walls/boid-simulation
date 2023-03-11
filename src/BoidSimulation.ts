@@ -34,13 +34,13 @@ export interface BoidSimulationParams {
     acceleration: number;
     worldName: string;
     worldDimens: Bounds3D;
-    rendering: RenderingModes;
+    rendering: RenderingMode;
     randomnessPerTimestep: number;
     randomnessLimit: number;
     changeOfLeaderBoidOptions: ChangeOfLeaderBoidOptions;
 }
 
-export enum RenderingModes {
+export enum RenderingMode {
     Simple = "Simple",
     Photorealistic = "Photorealistic",
 }
@@ -53,7 +53,7 @@ export class BoidSimulation extends Simulation {
     worldNames: string[] = WorldTools.getNames(this.worlds);
 
     currentWorldName: string = defaultWorld.name;
-    currentRendering: string = RenderingModes.Simple;
+    currentRendering: string = RenderingMode.Simple;
 
     boids: Boid[] = [];
     private nextBoidId: BoidId = 0;
@@ -69,7 +69,7 @@ export class BoidSimulation extends Simulation {
             this.worlds,
             this.currentWorldName,
         ).get3DBoundaries(),
-        rendering: RenderingModes.Simple,
+        rendering: RenderingMode.Simple,
         randomnessPerTimestep: 0.01,
         randomnessLimit: 0.1,
         changeOfLeaderBoidOptions: {
@@ -173,7 +173,7 @@ export class BoidSimulation extends Simulation {
     }
 
     getRenderingModeNames(): string[] {
-        return Object.values(RenderingModes);
+        return Object.values(RenderingMode);
     }
 
     initializePhotorealisticRendering() {
@@ -220,7 +220,7 @@ export class BoidSimulation extends Simulation {
     }
 
     updateSun() {
-        if (this.simParams.rendering !== RenderingModes.Photorealistic)
+        if (this.simParams.rendering !== RenderingMode.Photorealistic)
             throw new Error("Photorealistic rendering is disabled.");
         if (
             this.sun === undefined ||
@@ -272,7 +272,7 @@ export class BoidSimulation extends Simulation {
         );
 
         if (
-            this.simParams.rendering === RenderingModes.Photorealistic &&
+            this.simParams.rendering === RenderingMode.Photorealistic &&
             this.water !== undefined &&
             this.water.material instanceof ShaderMaterial
         ) {
@@ -297,7 +297,7 @@ export class BoidSimulation extends Simulation {
         this.arena = new Arena(this.simParams);
         this.addToScene(this.arena.mesh);
 
-        if (this.simParams.rendering === RenderingModes.Photorealistic) {
+        if (this.simParams.rendering === RenderingMode.Photorealistic) {
             this.initializePhotorealisticRendering();
         } else {
             // Floor
@@ -309,7 +309,7 @@ export class BoidSimulation extends Simulation {
         for (const description of world.obstacles.cylinders) {
             const cylinder = new Cylinder({
                 description: description,
-                rendering: RenderingModes.Photorealistic,
+                rendering: RenderingMode.Photorealistic,
             });
             this.addToScene(cylinder.mesh);
         }

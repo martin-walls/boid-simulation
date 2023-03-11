@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { Material } from "three";
-import { RenderingModes } from "../BoidSimulation";
+import { RenderingMode } from "../BoidSimulation";
 import { ICylinderDescription } from "./world/ICylinderDescription";
 
 export interface CylinderOptions {
@@ -23,7 +23,7 @@ export class Cylinder {
         );
 
         let material: Material;
-        if (options.rendering === RenderingModes.Photorealistic) {
+        if (options.rendering === RenderingMode.Photorealistic) {
             material = new THREE.MeshStandardMaterial({
                 color: 0x90d74b,
                 metalness: 1,
