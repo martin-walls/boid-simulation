@@ -5,9 +5,9 @@ export const smallWorld = new World({
     dimensions: {
         x: 100,
         y: 100,
-        z: 50
+        z: 50,
     },
     obstacles: {
-        cylinders: []
-    }
+        cylinders: [],
+    },
 });

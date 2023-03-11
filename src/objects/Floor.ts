@@ -2,15 +2,13 @@ import * as THREE from "three";
 import { BoidSimulationParams } from "../BoidSimulation";
 
 export class Floor {
-
     mesh: THREE.Object3D<THREE.Event>;
 
     private readonly padding = 50;
 
-    constructor(params: BoidSimulationParams, showGrid: boolean = true) {
-
-        const xSize = params.worldDimens.xSize + (2 * this.padding);
-        const zSize = params.worldDimens.zSize + (2 * this.padding);
+    constructor(params: BoidSimulationParams, showGrid = true) {
+        const xSize = params.worldDimens.xSize + 2 * this.padding;
+        const zSize = params.worldDimens.zSize + 2 * this.padding;
 
         const geometry = new THREE.PlaneGeometry(xSize, zSize);
         const material = new THREE.MeshBasicMaterial({ color: 0xd4d4d8 });
@@ -29,7 +27,5 @@ export class Floor {
         } else {
             this.mesh = floorMesh;
         }
-
     }
-
 }

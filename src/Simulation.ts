@@ -113,8 +113,8 @@ export class Simulation {
     }
 
     clearScene() {
-        while(this.scene.children.length > 0) { 
-            this.scene.remove(this.scene.children[0]); 
+        while (this.scene.children.length > 0) {
+            this.scene.remove(this.scene.children[0]);
         }
     }
 }

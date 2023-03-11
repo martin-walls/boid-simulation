@@ -1,7 +1,7 @@
 import * as THREE from "three";
-import {Material} from "three";
-import {Rule, RuleArguments} from "../rules/Rule";
-import {RenderingModes} from "../BoidSimulation";
+import { Material } from "three";
+import { Rule, RuleArguments } from "../rules/Rule";
+import { RenderingModes } from "../BoidSimulation";
 
 export interface BoidOptions {
     // Initial boid position

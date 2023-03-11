@@ -5,9 +5,9 @@ export const defaultWorld = new World({
     dimensions: {
         x: 200,
         y: 200,
-        z: 100
+        z: 100,
     },
     obstacles: {
-        cylinders: []
-    }
+        cylinders: [],
+    },
 });

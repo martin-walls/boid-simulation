@@ -2,7 +2,7 @@ import { Bounds3D } from "./Bounds3D";
 import { Boid, BoidId } from "./objects/Boid";
 import * as THREE from "three";
 import { RenderingModes } from "./BoidSimulation";
-import {ChangeOfLeaderBoid} from "./objects/ChangeOfLeaderBoid";
+import { ChangeOfLeaderBoid } from "./objects/ChangeOfLeaderBoid";
 
 /*
  * All available types of boid that can be generated.

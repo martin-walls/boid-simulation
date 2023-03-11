@@ -42,15 +42,13 @@ export interface BoidSimulationParams {
 
 export enum RenderingModes {
     Simple = "Simple",
-    Photorealistic = "Photorealistic"
+    Photorealistic = "Photorealistic",
 }
 
 export class BoidSimulation extends Simulation {
     controlsGui: GUI;
 
-    worlds: World[] = [
-        defaultWorld, smallWorld, obstacles1
-    ];
+    worlds: World[] = [defaultWorld, smallWorld, obstacles1];
 
     worldNames: string[] = WorldTools.getNames(this.worlds);
 
@@ -67,7 +65,10 @@ export class BoidSimulation extends Simulation {
         maxSpeed: 0.5,
         acceleration: 0.01,
         worldName: defaultWorld.name,
-        worldDimens: WorldTools.getWorldByName(this.worlds, this.currentWorldName).get3DBoundaries(),
+        worldDimens: WorldTools.getWorldByName(
+            this.worlds,
+            this.currentWorldName,
+        ).get3DBoundaries(),
         rendering: RenderingModes.Simple,
         randomnessPerTimestep: 0.01,
         randomnessLimit: 0.1,
@@ -83,7 +84,7 @@ export class BoidSimulation extends Simulation {
     };
 
     // initial world will get set in constructor by calling reloadWorld
-    private obstacleAvoidRule = new ObstacleAvoidanceRule(10, {world: defaultWorld});
+    private obstacleAvoidRule = new ObstacleAvoidanceRule(10, { world: defaultWorld });
 
     rules: Rule[] = [
         new SeparationRule(0.8),
@@ -116,7 +117,9 @@ export class BoidSimulation extends Simulation {
         });
 
         this.controlsGui.add(this.simParams, "worldName", this.worldNames).name("World");
-        this.controlsGui.add(this.simParams, "rendering", this.getRenderingModeNames()).name("Rendering");
+        this.controlsGui
+            .add(this.simParams, "rendering", this.getRenderingModeNames())
+            .name("Rendering");
         this.controlsGui.add(this.simParams, "boidCount", 10, 200).name("Boid count");
         this.controlsGui.add(this.simParams, "maxSpeed", 0.1, 2, 0.01).name("Max speed");
         this.controlsGui
@@ -251,8 +254,10 @@ export class BoidSimulation extends Simulation {
 
     update() {
         // Reload the world if needed
-        if (this.currentWorldName !== this.simParams.worldName ||
-            this.currentRendering !== this.simParams.rendering) {
+        if (
+            this.currentWorldName !== this.simParams.worldName ||
+            this.currentRendering !== this.simParams.rendering
+        ) {
             this.reloadWorld();
         }
 
@@ -303,8 +308,8 @@ export class BoidSimulation extends Simulation {
         // Obstacles
         for (const description of world.obstacles.cylinders) {
             const cylinder = new Cylinder({
-                description: description, 
-                rendering: RenderingModes.Photorealistic
+                description: description,
+                rendering: RenderingModes.Photorealistic,
             });
             this.addToScene(cylinder.mesh);
         }
@@ -326,7 +331,7 @@ export class BoidSimulation extends Simulation {
                 boidType: this.simParams.boidType,
                 positionBounds: this.simParams.worldDimens,
                 acceleration: this.simParams.acceleration,
-                rendering: this.simParams.rendering
+                rendering: this.simParams.rendering,
             });
             this.addToScene(boid.mesh);
             this.boids.push(boid);

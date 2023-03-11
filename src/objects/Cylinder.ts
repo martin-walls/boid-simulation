@@ -9,19 +9,17 @@ export interface CylinderOptions {
 }
 
 export class Cylinder {
-
     readonly mesh: Array<THREE.Object3D<THREE.Event>>;
     private readonly radialSegments: number = 16;
-    private innerMargin: number = 0.05;
+    private innerMargin = 0.05;
 
     constructor(options: CylinderOptions) {
-
         const bodyGeometry = new THREE.CylinderGeometry(
             options.description.radius - this.innerMargin,
             options.description.radius - this.innerMargin,
-            options.description.height - (this.innerMargin * 2),
+            options.description.height - this.innerMargin * 2,
             this.radialSegments,
-            1
+            1,
         );
 
         let material: Material;
@@ -42,8 +40,8 @@ export class Cylinder {
 
         bodyMesh.position.set(
             options.description.basePoint.x,
-            options.description.basePoint.y + (options.description.height / 2) + this.innerMargin,
-            options.description.basePoint.z
+            options.description.basePoint.y + options.description.height / 2 + this.innerMargin,
+            options.description.basePoint.z,
         );
 
         const wireframeGeometry = new THREE.CylinderGeometry(
@@ -51,22 +49,23 @@ export class Cylinder {
             options.description.radius,
             options.description.height,
             this.radialSegments,
-            1
+            1,
         );
 
         const wireframeTemplate = new THREE.Mesh(wireframeGeometry, material);
 
-        const lineMaterial = new THREE.LineBasicMaterial( { color: 0xffffff, linewidth: 2 } );
-        const wireframe = new THREE.LineSegments(new THREE.EdgesGeometry(wireframeTemplate.geometry), lineMaterial);
+        const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 2 });
+        const wireframe = new THREE.LineSegments(
+            new THREE.EdgesGeometry(wireframeTemplate.geometry),
+            lineMaterial,
+        );
 
         wireframe.position.set(
             options.description.basePoint.x,
-            options.description.basePoint.y + (options.description.height / 2),
-            options.description.basePoint.z
+            options.description.basePoint.y + options.description.height / 2,
+            options.description.basePoint.z,
         );
 
         this.mesh = [bodyMesh, wireframe];
-
     }
-
 }

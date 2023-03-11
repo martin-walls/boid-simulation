@@ -4,7 +4,6 @@ import { Obstacles } from "./Obstacles";
 import { XYZ } from "./XYZ";
 
 export class World implements IWorld {
-
     name: string;
     dimensions: XYZ;
     obstacles: Obstacles;
@@ -18,5 +17,4 @@ export class World implements IWorld {
     get3DBoundaries(): Bounds3D {
         return Bounds3D.centredXZ(this.dimensions.x, this.dimensions.y, this.dimensions.z);
     }
-
 }

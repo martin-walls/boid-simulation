@@ -3,7 +3,7 @@ import { Boid } from "../objects/Boid";
 import * as THREE from "three";
 import { World } from "../objects/world/World";
 
-export interface ObstacleAvoiodanceRuleOptions extends RuleOptions {
+export interface ObstacleAvoidanceRuleOptions extends RuleOptions {
     sharpness?: number;
     world: World;
 }
@@ -25,7 +25,7 @@ export class ObstacleAvoidanceRule extends Rule {
 
     private world: World;
 
-    constructor(weight: number, options: ObstacleAvoiodanceRuleOptions) {
+    constructor(weight: number, options: ObstacleAvoidanceRuleOptions) {
         super(weight, options);
         this.SHARPNESS = options.sharpness ?? 3;
         this.world = options.world;
@@ -35,16 +35,16 @@ export class ObstacleAvoidanceRule extends Rule {
         this.world = world;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     calculateVector(thisBoid: Boid, _args: RuleArguments): THREE.Vector3 {
-
         const finalVector = new THREE.Vector3();
 
         for (const cylinder of this.world.obstacles.cylinders) {
-            let avoidanceVector = new THREE.Vector3();
-            let adjustedCylinderPosition = new THREE.Vector3(
+            const avoidanceVector = new THREE.Vector3();
+            const adjustedCylinderPosition = new THREE.Vector3(
                 cylinder.basePoint.x,
                 thisBoid.position.y,
-                cylinder.basePoint.z
+                cylinder.basePoint.z,
             );
             avoidanceVector.subVectors(thisBoid.position, adjustedCylinderPosition);
             let distance = avoidanceVector.length() - cylinder.radius;
@@ -59,5 +59,4 @@ export class ObstacleAvoidanceRule extends Rule {
         finalVector.multiplyScalar(this.weight);
         return finalVector;
     }
-
 }
