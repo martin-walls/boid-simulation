@@ -102,6 +102,8 @@ export class ChangeOfLeaderBoid extends Boid {
         const changeOfLeaderOptions = ruleArguments.simParams.changeOfLeaderBoidOptions;
         // don't bother doing all the calculations if there's no chance of becoming a leader
         if (changeOfLeaderOptions.becomeLeaderProbability <= 0) {
+            // reset to base colour
+            this.setColour(new THREE.Color().setHSL(0.7, 1, 0.1));
             return;
         }
         const x = this.calculateEccentricity(
