@@ -187,7 +187,7 @@ export class BoidSimulation extends Simulation {
             textureWidth: 512,
             textureHeight: 512,
             waterNormals: new THREE.TextureLoader().load(
-                "textures/waternormals.jpg",
+                "waternormals.jpg",
                 function (texture) {
                     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
                 },
